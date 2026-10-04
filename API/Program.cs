@@ -1,8 +1,12 @@
-var builder = WebApplication.CreateBuilder(args);
+using Persistence;
 
+var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllers();
+
+// Register DataContext
+builder.Services.AddDbContext<DataContext>();
 
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
@@ -15,10 +19,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-//app.UseHttpsRedirection();
-
+app.UseHttpsRedirection();
 
 app.MapControllers();    
 app.Run();
-
 

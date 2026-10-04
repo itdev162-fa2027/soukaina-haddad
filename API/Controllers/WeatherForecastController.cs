@@ -18,12 +18,12 @@ public class WeatherForecastController : ControllerBase
 
 private readonly ILogger<WeatherForecastController> _logger;
 
-//private readonly DataContext _context;
+private readonly DataContext _context;
 
-public WeatherForecastController(ILogger<WeatherForecastController> logger)//, DataContext context)
+public WeatherForecastController(ILogger<WeatherForecastController> logger, DataContext context)
     {
         _logger = logger;
-       // _context = context;
+        _context = context;
     }
 
     [HttpGet (Name = "GetWeatherForecast")]
@@ -39,5 +39,30 @@ public IEnumerable<WeatherForecast> Get()
     })
         .ToArray();
     }
+[HttpPost]
+
+public ActionResult<WeatherForecast> Create()
+    {
+        //View in your VS Code console
+        Console.WriteLine($"Database path: {_context.DbPath}");
+        Console.WriteLine("Insert a new WeatherForcast");
+
+        var forecast = new WeatherForecast()
+        {
+            Date = new DateOnly(),
+            TemperatureC = 75,
+            Summary = "Warm"
+        };
+        _context.WeatherForecasts.Add(forecast);
+        var success = _context.SaveChanges() > 0;
+
+        if (success)
+        {
+            return forecast;
+        }
+        throw new Exception("Error creating WeatherForcast");
+
+    }
+
     
 }
